@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const { clog } = require('./middleware/clog');
 const app = express();
-const api = require('./routes/index.js');
+// const api = require('./routes/index.js');
 const html = require('./routes/html');
 
 app.use(express.json());
