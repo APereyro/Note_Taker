@@ -1,13 +1,9 @@
 const express = require('express');
-
-// Import our modular routers for /api and /html
-const apiRouter = require('./api');
-const htmlRouter = require('./html');
-
 const app = express();
+const htmlRouter = require('./html');
+const apiRouter = require('./api');
 
-app.use('/api', apiRouter);
 app.use('/html', htmlRouter);
-
-
+// app.use('/api', apiRouter);
+//router.delete
 module.exports = app;

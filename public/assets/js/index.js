@@ -5,9 +5,10 @@ let newNoteBtn;
 let noteList;
 
 if (window.location.pathname === '/notes') {
+  console.log('insisde if statemetn');
   noteTitle = document.querySelector('.note-title');
   noteText = document.querySelector('.note-textarea');
-  saveNoteBtn = document.querySelector('.save-note');
+  saveNoteBtn = document.getElementById('saveBtn');
   newNoteBtn = document.querySelector('.new-note');
   noteList = document.querySelectorAll('.list-container .list-group');
 }
@@ -26,24 +27,25 @@ const hide = (elem) => {
 let activeNote = {};
 
 const getNotes = () =>
-  fetch('/api/notes', {
+  fetch('/html', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
   });
 
-const saveNote = (note) =>
-  fetch('/api/notes', {
+const saveNote = async (note) => {
+console.log(note);
+  await fetch('/html', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(note),
   });
-
+}
 const deleteNote = (id) =>
-  fetch(`/api/notes/${id}`, {
+  fetch(`/html${id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
@@ -51,9 +53,11 @@ const deleteNote = (id) =>
   });
 
 const renderActiveNote = () => {
+  console.log('activeNote.id', activeNote);
   hide(saveNoteBtn);
 
   if (activeNote.id) {
+    console.log('activeNote.id', activeNote.id);
     noteTitle.setAttribute('readonly', true);
     noteText.setAttribute('readonly', true);
     noteTitle.value = activeNote.title;
@@ -67,10 +71,12 @@ const renderActiveNote = () => {
 };
 
 const handleNoteSave = () => {
+  console.log('clciked');
   const newNote = {
     title: noteTitle.value,
     text: noteText.value,
   };
+  console.log(newNote);
   saveNote(newNote).then(() => {
     getAndRenderNotes();
     renderActiveNote();
@@ -97,6 +103,7 @@ const handleNoteDelete = (e) => {
 
 // Sets the activeNote and displays it
 const handleNoteView = (e) => {
+  console.log("notebtnclicked");
   e.preventDefault();
   activeNote = JSON.parse(e.target.parentElement.getAttribute('data-note'));
   renderActiveNote();
@@ -174,10 +181,13 @@ const renderNoteList = async (notes) => {
 const getAndRenderNotes = () => getNotes().then(renderNoteList);
 
 if (window.location.pathname === '/notes') {
+  console.log('if block');
   saveNoteBtn.addEventListener('click', handleNoteSave);
   newNoteBtn.addEventListener('click', handleNewNoteView);
   noteTitle.addEventListener('keyup', handleRenderSaveBtn);
   noteText.addEventListener('keyup', handleRenderSaveBtn);
+}else {
+  console.log('we not inside');
 }
 
 getAndRenderNotes();
